@@ -53,11 +53,14 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data['user']
-        token = serializer.create(serializer.validated_data)
+        token_data = serializer.create(serializer.validated_data)
+        
         return Response(
             {
                 "message": "Login successful",
-                "access_token": token['token']
+                "access_token": token_data['token'],
+                "name": token_data['name'],
+                "email": token_data['email']
             },
             status=status.HTTP_200_OK
         )
