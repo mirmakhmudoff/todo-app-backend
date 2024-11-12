@@ -79,4 +79,8 @@ class LoginSerializer(serializers.Serializer):
     def create(self, validated_data):
         user = validated_data['user']
         token = AccessToken.for_user(user)
-        return {'token': str(token)}
+        return {
+            'token': str(token),
+            'name': user.name,
+            'email': user.email
+        }
