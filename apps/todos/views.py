@@ -51,3 +51,14 @@ class TodoStatusUpdateView(APIView):
             return Response(todo_serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class TodoDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            todo = Todo.objects.get(pk=pk, user=request.user)
+            todo.delete()
+            return Response({"message": "Todo deleted successfully."}, status=status.HTTP_200_OK)
+        except Todo.DoesNotExist:
+            return Response({"error": "Todo not found."}, status=status.HTTP_404_NOT_FOUND)
